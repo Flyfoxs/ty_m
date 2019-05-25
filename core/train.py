@@ -56,20 +56,20 @@ NUM_CLASSES   = 9
 BATCH_SIZE    = 8  # try reducing batch size or freeze more layers if your GPU runs out of memory
 FREEZE_LAYERS = 2  # freeze the first this many layers for training
 NUM_EPOCHS    = 20
-WEIGHTS_FINAL = 'model-inception_resnet_v2-final.h5'
 
 
 
 
 train_datagen = ImageDataGenerator(preprocessing_function=preprocess_input,
-                                   rotation_range=40,
+                                   rotation_range=5,
                                    width_shift_range=0.2,
                                    height_shift_range=0.2,
                                    shear_range=0.2,
                                    zoom_range=0.2,
-                                   channel_shift_range=10,
-                                   horizontal_flip=True,
-                                   fill_mode='nearest')
+                                   # channel_shift_range=10,
+                                   # horizontal_flip=True,
+                                   fill_mode='nearest'
+                                   )
 # train_batches = train_datagen.flow_from_directory(DATASET_PATH + '/train',
 #                                                   target_size=IMAGE_SIZE,
 #                                                   interpolation='bicubic',
@@ -132,17 +132,21 @@ net_final.compile(optimizer=Adam(lr=1e-5),
 #print(net_final.summary())
 
 # train the model
-net_final.fit_generator(train_batches,
-                        steps_per_epoch = train_batches.samples // BATCH_SIZE,
-                        validation_data = valid_batches,
-                        validation_steps = valid_batches.samples // BATCH_SIZE,
-                        epochs = NUM_EPOCHS)
+for i in range(10):
+    net_final.fit_generator(train_batches,
+                            steps_per_epoch = train_batches.samples // BATCH_SIZE,
+                            validation_data = valid_batches,
+                            validation_steps = valid_batches.samples // BATCH_SIZE,
+                            epochs = 1)
 
-# save trained weights
-net_final.save(WEIGHTS_FINAL)
+    WEIGHTS_FINAL = f'./output/model-inception_resnet_v{i}-final.h5'
+
+    # save trained weights
+    net_final.save(WEIGHTS_FINAL)
+    print(f'weight save to {WEIGHTS_FINAL}')
 
 
 """
-nohup python -u  core/train.py &
+nohup python -u  core/train.py > log_25_epo.log 2>&1 &
 
 """
