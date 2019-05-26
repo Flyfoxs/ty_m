@@ -61,13 +61,10 @@ NUM_EPOCHS    = 20
 
 
 train_datagen = ImageDataGenerator(preprocessing_function=preprocess_input,
-                                   rotation_range=5,
-                                   width_shift_range=0.2,
-                                   height_shift_range=0.2,
-                                   shear_range=0.2,
-                                   zoom_range=0.2,
-                                   # channel_shift_range=10,
-                                   # horizontal_flip=True,
+                                   rotation_range=2,
+                                   width_shift_range=0.7,
+                                   height_shift_range=0.1,
+                                   zoom_range=[0.9, 1.2],
                                    fill_mode='nearest'
                                    )
 # train_batches = train_datagen.flow_from_directory(DATASET_PATH + '/train',
@@ -139,7 +136,7 @@ for i in range(10):
                             validation_steps = valid_batches.samples // BATCH_SIZE,
                             epochs = 1)
 
-    WEIGHTS_FINAL = f'./output/model-inception_resnet_v{i}-final.h5'
+    WEIGHTS_FINAL = f'./output/model-inception_resnet_v{i}-25.h5'
 
     # save trained weights
     net_final.save(WEIGHTS_FINAL)
@@ -147,6 +144,6 @@ for i in range(10):
 
 
 """
-nohup python -u  core/train.py > log_25_epo.log 2>&1 &
+nohup python -u  core/train.py > log_25_new_enhance.log 2>&1 &
 
 """
