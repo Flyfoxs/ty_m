@@ -138,11 +138,11 @@ def train_raw():
     #print(net_final.summary())
 
     # train the model
-    for i in range(10):
+    for i in range(1):
         net_final.fit_generator(train_batches,
                                 steps_per_epoch = train_batches.samples // BATCH_SIZE//10,
                                 validation_data = valid_batches,
-                                validation_steps = valid_batches.samples // BATCH_SIZE,
+                                validation_steps = valid_batches.samples // BATCH_SIZE//10,
                                 epochs = 1)
 
         gen_sub(net_final, testdf, sn=i)
@@ -152,6 +152,8 @@ def train_raw():
         # save trained weights
         net_final.save(WEIGHTS_FINAL)
         print(f'weight save to {WEIGHTS_FINAL}')
+
+    return WEIGHTS_FINAL
 
 
 if __name__ == '__main__':
